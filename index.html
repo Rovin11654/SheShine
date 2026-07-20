@@ -36,9 +36,9 @@
 
 *{box-sizing:border-box; margin:0; padding:0;}
 
-/* Added full transition logic to HTML tag to make theme fade buttery smooth */
 html {
   transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  height: 100%;
 }
 
 body{
@@ -48,6 +48,9 @@ body{
   font-weight:400;
   overflow-x:hidden;
   transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 h1,h2,h3,.display{
   font-family:'Cormorant Garamond', serif;
@@ -104,6 +107,7 @@ button{font-family:inherit; cursor:pointer; border:none;}
   opacity: 0;
   transform: translateY(15px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  flex: 1;
 }
 .view.active { 
   display: block; 
@@ -116,21 +120,28 @@ button{font-family:inherit; cursor:pointer; border:none;}
 /* ---------- Hero / Home ---------- */
 .hero{
   position:relative;
-  padding:120px 6vw 80px;
+  padding:160px 6vw 120px; /* Increased structural padding to avoid crowding */
   text-align:center;
   overflow:hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.hero .eyebrow{display:block; margin-bottom:14px;}
+.hero .eyebrow{display:block; margin-bottom:18px;}
 .hero h1{
   font-size:clamp(2.6rem, 6vw, 4.6rem);
   line-height:1.05;
   font-style:italic;
-  max-width:900px; margin:0 auto;
+  max-width:900px; 
+  margin:0 auto;
+  text-align: center; /* Perfectly centralized title */
 }
 .hero h1 em{color:var(--rose); font-style:normal;}
 .hero p{
   max-width:520px; margin:22px auto 34px;
   font-weight:300; font-size:1.05rem; opacity:0.75;
+  text-align: center;
 }
 .hero-cta{
   background:var(--rose); color:#fff;
@@ -278,7 +289,7 @@ button{font-family:inherit; cursor:pointer; border:none;}
 
 /* ---------- Business / WB Info Footer Section ---------- */
 .wb-details-section {
-  padding: 30px 6vw;
+  padding: 40px 6vw;
   background: var(--card-bg);
   border-top: 1px solid var(--line);
   display: grid;
@@ -286,6 +297,7 @@ button{font-family:inherit; cursor:pointer; border:none;}
   gap: 24px;
   font-size: 0.88rem;
   transition: background 0.4s ease, border-color 0.4s ease;
+  margin-top: auto; /* Pushes contact section down globally */
 }
 .wb-block h4 {
   font-family: 'Cormorant Garamond', serif;
@@ -298,7 +310,7 @@ button{font-family:inherit; cursor:pointer; border:none;}
   line-height: 1.5;
 }
 
-footer{ text-align:center; padding:40px; font-size:0.78rem; opacity:0.5; border-top:1px solid var(--line); margin-top: auto; transition: border-color 0.4s ease;}
+footer{ text-align:center; padding:30px 40px 40px; font-size:0.78rem; opacity:0.5; transition: border-color 0.4s ease;}
 
 @media (max-width:768px){
   .p-detail-wrap { grid-template-columns: 1fr; gap: 30px; }
@@ -306,7 +318,7 @@ footer{ text-align:center; padding:40px; font-size:0.78rem; opacity:0.5; border-
 }
 @media (max-width:640px){
   .nav{padding:14px 5vw;}
-  .hero{padding:60px 6vw 40px;}
+  .hero{padding:100px 6vw 60px;}
 }
 </style>
 </head>
@@ -403,7 +415,7 @@ footer{ text-align:center; padding:40px; font-size:0.78rem; opacity:0.5; border-
 </div>
 
 <script>
-const WHATSAPP_NUMBER   = "917339320777"; // Your WhatsApp Business Number with Country Code
+const WHATSAPP_NUMBER   = "917339320777"; 
 const BUSINESS_NAME     = "She Shine Boutique";
 const ADMIN_PASSWORD    = "shine2026";
 
@@ -427,7 +439,6 @@ function dressSVG(color){
 
 function money(n){ return '₹' + n.toLocaleString('en-IN'); }
 
-/* Dynamic Popup System */
 function showPopupNotification(message) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -436,17 +447,14 @@ function showPopupNotification(message) {
   
   container.appendChild(toast);
   
-  // Trigger layout reflow for animation transition execution
   setTimeout(() => toast.classList.add('show'), 10);
   
-  // Graceful cleanup window
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);
   }, 2800);
 }
 
-/* Routing Architecture with Animated Cross-Fades */
 function navigateTo(viewId, productId = null) {
   const currentActive = document.querySelector('.view.active');
   const targetView = 
@@ -501,7 +509,6 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-/* Light / Dark Mode Toggle */
 function toggleTheme() {
   const currentTheme = document.documentElement.getAttribute('data-theme');
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -543,7 +550,6 @@ function showProductDetail(id) {
   `;
 }
 
-/* Operational Handlers */
 function addToCart(id){ 
   cart[id] = (cart[id] || 0) + 1; 
   renderCart(); 
@@ -585,7 +591,6 @@ function renderCart(){
 function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
 function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
 
-/* Optimized WhatsApp Deep-Link Checkout Routing */
 function openCheckout(){
   const lines = cartLines(); 
   if(lines.length === 0) return;
@@ -593,13 +598,11 @@ function openCheckout(){
   const total = lines.reduce((s,l) => s + l.lineTotal, 0);
   const baseUrl = window.location.origin + window.location.pathname;
 
-  // Build perfectly formatted markdown string for WhatsApp
   let message = `Hello ${BUSINESS_NAME}! 👋\n\nI would like to place an order for the following items:\n`;
   message += `--------------------------------\n`;
   
   lines.forEach(l => {
     message += `🛍️ *${l.name}* (x${l.qty}) - ${money(l.lineTotal)}\n`;
-    // Method 1: Drop dynamic anchor link to fire a high-res image preview wrapper inside WhatsApp chat
     message += `🔗 View Item: ${baseUrl}%23product/${l.id}\n\n`;
   });
   
@@ -607,13 +610,10 @@ function openCheckout(){
   message += `💰 *Subtotal Total:* ${money(total)}\n\n`;
   message += `Please confirm availability and share payment steps. Thank you!`;
 
-  // Encode text parameter payload neatly 
   const targetWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   
-  // Fire link transfer in a secure context window
   window.open(targetWhatsAppUrl, '_blank');
   
-  // Wipe localized cart tracking post redirect
   cart = {}; 
   renderCart();
   closeCart();
